@@ -6,10 +6,11 @@ CONTACTS_DICT = {
 }
 
 
-def keyboard_contacts():
+def keyboard_contacts() -> InlineKeyboardMarkup:
     """
+    Клавиатура для вывода клавиатуры с ссылками информации о сайтах
 
-    :return:
+    :return: InlineKeyboardMarkup
     """
     return InlineKeyboardMarkup(
         keyboard=[

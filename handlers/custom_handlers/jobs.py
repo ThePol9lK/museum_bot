@@ -4,10 +4,11 @@ from loader import bot
 
 
 @bot.message_handler(commands=["jobs"])
-def display_contacts(message: Message):
+def display_jobs(message: Message):
     """
+    Функция для вывода информации о работы ЦДК 'Созвездие'
 
-    :param message:
+    :param message: Message
     :return:
     """
     bot.send_message(message.chat.id,

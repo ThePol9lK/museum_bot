@@ -4,5 +4,11 @@ from loader import bot
 
 
 @bot.message_handler(commands=["start"])
-def bot_start(message: Message):
-    bot.reply_to(message, f"Привет, друг!")
+def bot_start(message: Message) -> None:
+    """
+    Фунция для запуска бота
+
+    :param message: Message
+    :return:
+    """
+    bot.reply_to(message, f"Привет, друг! Напиши /help для вывода информация что я могу.")

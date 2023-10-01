@@ -2,15 +2,89 @@ import json
 import os
 
 import requests
-from auth_data import token
 
 
+from config_data.config import VK_TOKEN, GROUP_NAME
+
+
+# class ParserVK:
+#     url = f"https://api.vk.com/method/wall.get?domain={GROUP_NAME}&count=11&access_token={VK_TOKEN}&v=5.131"
 #
+#     def read_news_json(self) -> None:
+#         """
+#         Читает значения в answer.json
+#
+#         :return:
+#         """
+#         with open('parser_site/answer.json', 'r', encoding="utf-8") as fcc_file:
+#             fcc_data = json.load(fcc_file)
+#         return fcc_data
+#
+#     def save_news_json(self, fresh_posts_id) -> None:
+#         """
+#         Сохраняет значения в answer.json
+#
+#         :return:
+#         """
+#
+#         with open(f"parser_site/answer.json", "w", encoding="utf-8") as file:
+#             json.dump(fresh_posts_id, file, indent=4, ensure_ascii=False)
+#
+#     def news_answer(self):
+#         """
+#
+#
+#         :return:
+#         """
+#         with open(f'parser_site/{GROUP_NAME}/{GROUP_NAME}.json', 'r', encoding="utf-8") as fcc_file:
+#             fcc_data = json.load(fcc_file)
+#
+#         fresh_posts_id = {}
+#         posts = fcc_data["response"]["items"]
+#
+#         for count in range(1, 11):
+#
+#             fresh_post_id = posts[count]
+#             posts_id = posts[count]["id"]
+#             posts_text = posts[count]['text']
+#             url = f"https://vk.com/wall{posts[count]['from_id']}_{posts_id}"
+#
+#             if "copy_history" in fresh_post_id:
+#                 continue
+#
+#             elif "attachments" in fresh_post_id:
+#
+#                 photo_quality = [
+#                     "w",
+#                     "z",
+#                     "y"
+#                 ]
+#
+#                 post = fresh_post_id["attachments"]
+#                 if post[0]['type'] == 'photo':
+#                     post_photo = ''
+#
+#                     for pq in photo_quality:
+#                         break_out_flag = False
+#                         for i in range(len(post[0]["photo"]["sizes"])):
+#                             if pq in post[0]["photo"]["sizes"][i]['type']:
+#                                 post_photo = post[0]["photo"]["sizes"][i]['url']
+#
+#                                 break_out_flag = True
+#                                 break
+#                         if break_out_flag:
+#                             break
+#                     fresh_posts_id[posts_id] = post_photo, posts_text, url
+#
+#                 elif post[0]['type'] == 'video':
+#                     continue
+#
+#         self.save_news_json(fresh_posts_id)
 
 
 def get_wall_posts():
-    group_name = 'cdk_orevo'
-    url = f"https://api.vk.com/method/wall.get?domain={group_name}&count=11&access_token={token}&v=5.131"
+    group_name = 'cdk_sozvezdie'
+    url = f"https://api.vk.com/method/wall.get?domain={GROUP_NAME}&count=11&access_token={VK_TOKEN}&v=5.131"
     req = requests.get(url)
     src = req.json()
 
@@ -93,7 +167,7 @@ def get_wall_posts():
 
 
 def news_answer():
-    with open('cdk_orevo/cdk_orevo.json', 'r', encoding="utf-8") as fcc_file:
+    with open(f'parser_site/{GROUP_NAME}/{GROUP_NAME}.json', 'r', encoding="utf-8") as fcc_file:
         fcc_data = json.load(fcc_file)
 
     fresh_posts_id = {}
@@ -104,6 +178,7 @@ def news_answer():
         fresh_post_id = posts[count]
         posts_id = posts[count]["id"]
         posts_text = posts[count]['text']
+        url = f"https://vk.com/wall{posts[count]['from_id']}_{posts_id}"
 
         if "copy_history" in fresh_post_id:
             continue
@@ -112,57 +187,34 @@ def news_answer():
 
             photo_quality = [
                 "w",
-                "z"
+                "z",
+                "y"
             ]
 
             post = fresh_post_id["attachments"]
             if post[0]['type'] == 'photo':
                 post_photo = ''
 
-                if len(post) == 1:
+                for pq in photo_quality:
+                    break_out_flag = False
+                    for i in range(len(post[0]["photo"]["sizes"])):
+                        if pq in post[0]["photo"]["sizes"][i]['type']:
+                            post_photo = post[0]["photo"]["sizes"][i]['url']
 
-                    for pq in photo_quality:
-                        break_out_flag = False
-                        for i in range(len(post[0]["photo"]["sizes"])):
-                            if pq in post[0]["photo"]["sizes"][i]['type']:
-                                post_photo = post[0]["photo"]["sizes"][i]['url']
-                                break_out_flag = True
-                                break
-                        if break_out_flag:
+                            break_out_flag = True
                             break
-                    fresh_posts_id[posts_id] = post_photo, posts_text
-
-                else:
-                    for pq in photo_quality:
-                        break_out_flag = False
-                        for i in range(len(post[0]["photo"]["sizes"])):
-                            if pq in post[0]["photo"]["sizes"][i]['type']:
-                                post_photo = post[0]["photo"]["sizes"][i]['url']
-                                break_out_flag = True
-                                break
-                        if break_out_flag:
-                            break
-                    fresh_posts_id[posts_id] = post_photo, posts_text
-
+                    if break_out_flag:
+                        break
+                fresh_posts_id[posts_id] = post_photo, posts_text, url
 
             elif post[0]['type'] == 'video':
-                print('Тут видео')
+                continue
 
-    print(fresh_posts_id)
-
-    with open(f"answer.json", "w", encoding="utf-8") as file:
+    with open(f"parser_site/answer.json", "w", encoding="utf-8") as file:
         json.dump(fresh_posts_id, file, indent=4, ensure_ascii=False)
 
-    # for count in range(1, 11):
-    #     if "attachments" in post:
-    #         post = post["attachments"]
-    #     if post[0]["type"] == "photo":
-    #         #фото новости
-    #         photo = fcc_data["response"]["items"][count]['attachments'][0]['photo']['sizes'][5]['url']
-    #
-    #     #текст из новости
-    #     text = fcc_data["response"]["items"][count]['text']
-    #     print(photo, text)
 
-
-news_answer()
+def read_news_json():
+    with open('parser_site/answer.json', 'r', encoding="utf-8") as fcc_file:
+        fcc_data = json.load(fcc_file)
+    return fcc_data
