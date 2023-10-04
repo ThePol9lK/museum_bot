@@ -40,7 +40,6 @@ def callback_query_pagination(call: CallbackQuery) -> None:
     caption = f'{poster[count].title}\n {poster[count].description}'
     link = poster[count].link
     link_second = poster[count].buy_ticket
-    print(link_second)
 
     media = InputMediaPhoto(poster_photo, caption=caption)
 

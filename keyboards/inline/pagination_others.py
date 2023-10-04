@@ -1,7 +1,7 @@
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 
-def pagination_others(count: int, page: int, key: str, link: str = None,
+def pagination_others(count: int, page: int, key: str, key_2: str = None, link: str = None,
                       link_second: str = None) -> InlineKeyboardMarkup:
     """"
     Клавиатура пагинация для вывода фото (на остальные фото)
@@ -15,18 +15,37 @@ def pagination_others(count: int, page: int, key: str, link: str = None,
     """
 
     markup = InlineKeyboardMarkup()
-    markup.add(
-        InlineKeyboardButton(text=f'Предыдущее',
-                             callback_data="{\"KeyPage\":" + '"' + key + '"' + ",\"NumberPage\":" + str(page - 1) + "}"
-                             ),
 
-        InlineKeyboardButton(text=f'{page + 1}/{count}',
-                             callback_data=f' '),
+    if key_2:
+        markup.add(
+            InlineKeyboardButton(text=f'Предыдущее',
+                                 callback_data="{\"KeyPage\":" + '"' + key + '"' + ",\"NumberPage\":" + str(
+                                     page - 1) + ",\"Key\":" + str(key_2) + "}"
+                                 ),
 
-        InlineKeyboardButton(text=f'Следующее',
-                             callback_data="{\"KeyPage\":" + '"' + key + '"' + ",\"NumberPage\":" + str(page + 1) + "}"
-                             )
-    )
+            InlineKeyboardButton(text=f'{page + 1}/{count}',
+                                 callback_data=f' '),
+
+            InlineKeyboardButton(text=f'Следующее',
+                                 callback_data="{\"KeyPage\":" + '"' + key + '"' + ",\"NumberPage\":" + str(
+                                     page + 1) + ",\"Key\":" + str(key_2) + "}"
+                                 )
+        )
+    else:
+        markup.add(
+            InlineKeyboardButton(text=f'Предыдущее',
+                                 callback_data="{\"KeyPage\":" + '"' + key + '"' + ",\"NumberPage\":" + str(page - 1) + "}"
+                                 ),
+
+            InlineKeyboardButton(text=f'{page + 1}/{count}',
+                                 callback_data=f' '),
+
+            InlineKeyboardButton(text=f'Следующее',
+                                 callback_data="{\"KeyPage\":" + '"' + key + '"' + ",\"NumberPage\":" + str(page + 1) + "}"
+                                 )
+        )
+
+
     if link:
         markup.add(InlineKeyboardButton(text='Больше информации', url=f'{link}'))
 

@@ -1,3 +1,4 @@
+# from . import new
 from . import contacts
 from . import jobs
 from . import anketa

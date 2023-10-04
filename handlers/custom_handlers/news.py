@@ -6,7 +6,7 @@ from keyboards.inline.pagination_first import pagination_first
 from keyboards.inline.pagination_last import pagination_last
 from keyboards.inline.pagination_others import pagination_others
 from loader import bot
-from parser_site.news_vk.part_one import news_answer, get_wall_posts, read_news_json
+from parser_site.pasring import ParserVK
 
 
 @bot.message_handler(commands=["news"])
@@ -16,9 +16,9 @@ def display_contacts(message: Message):
     :param message:
     :return:
     """
-    get_wall_posts()
-    news_answer()
-    news = read_news_json()
+    ParserVK.first_request()
+    ParserVK.news_answer()
+    news = ParserVK.read_news_json()
 
     count = len(news)
 
@@ -42,7 +42,7 @@ def callback_query_pagination(call: CallbackQuery) -> None:
     page = json_string['NumberPage']
     key = json_string['KeyPage']
 
-    news = read_news_json()
+    news = ParserVK.read_news_json()
     news_key = list(news.keys())[page]
     count = len(news)
 
@@ -57,7 +57,7 @@ def callback_query_pagination(call: CallbackQuery) -> None:
             link=link
         )
 
-    elif page == count:
+    elif page == count-1:
         keyboard = pagination_last(
             count=count,
             page=page,
