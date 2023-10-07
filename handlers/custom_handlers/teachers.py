@@ -9,10 +9,11 @@ from keyboards.inline.pagination_others import pagination_others
 
 
 @bot.message_handler(commands=["teacher"])
-def display_posters(message: Message):
+def display_teachers(message: Message):
     """
+    Обработка команды teacher.
 
-    :param message:
+    :param message: Message
     :return:
     """
     all_teachers = get_all_teachers()
@@ -31,6 +32,12 @@ def display_posters(message: Message):
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith('{"KeyPage":"teacher"'))
 def callback_query_pagination(call: CallbackQuery) -> None:
+    """
+    Обработка пагинации на команду teacher
+
+    :param call: CallbackQuery
+    :return:
+    """
     json_string = json.loads(call.data)
     count = json_string['NumberPage']
     key = json_string['KeyPage']

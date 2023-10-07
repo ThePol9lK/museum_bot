@@ -11,8 +11,9 @@ from keyboards.inline.pagination_others import pagination_others
 @bot.message_handler(commands=["poster"])
 def display_posters(message: Message):
     """
+    Обработка команды poster.
 
-    :param message:
+    :param message: Message
     :return:
     """
     all_posters = get_all_posters()
@@ -31,6 +32,12 @@ def display_posters(message: Message):
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith('{"KeyPage":"poster"'))
 def callback_query_pagination(call: CallbackQuery) -> None:
+    """
+    Обработка пагинации на команду poster
+
+    :param call: CallbackQuery
+    :return:
+    """
     json_string = json.loads(call.data)
     count = json_string['NumberPage']
     key = json_string['KeyPage']

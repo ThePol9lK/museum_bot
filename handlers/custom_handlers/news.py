@@ -10,10 +10,11 @@ from parser_site.pasring import ParserVK
 
 
 @bot.message_handler(commands=["news"])
-def display_contacts(message: Message):
+def display_news(message: Message):
     """
+    Обработка команды news.
 
-    :param message:
+    :param message: Message
     :return:
     """
     ParserVK.first_request()
@@ -38,6 +39,12 @@ def display_contacts(message: Message):
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith('{"KeyPage":"news"'))
 def callback_query_pagination(call: CallbackQuery) -> None:
+    """
+    Обработка пагинации на команду news
+
+    :param call: CallbackQuery
+    :return:
+    """
     json_string = json.loads(call.data)
     page = json_string['NumberPage']
     key = json_string['KeyPage']

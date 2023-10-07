@@ -6,7 +6,7 @@ def set_default_commands(bot) -> None:
     """
     Задаем команды для бота
 
-    :param bot:
+    :param bot: Bot
     :return:
     """
     bot.set_my_commands(
